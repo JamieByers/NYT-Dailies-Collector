@@ -15,9 +15,15 @@ class DailiesCollector {
 
         Fetcher fetcher = new Fetcher();
 
-        Wordle? wordle = await Fetcher.handleWordle();
-        if (wordle is not null) {
-            db.insertIntoWordle(wordle);
+        /* Wordle? wordle = await Fetcher.handleWordle(); */
+        /* if (wordle is not null) { */
+        /*     db.insertIntoWordle(wordle); */
+        /* } */
+
+        Connections? connections = await Fetcher.handleConnections();
+        if (connections is not null) {
+            connections.Display();
+            db.insertIntoConnections(connections);
         }
 
     }

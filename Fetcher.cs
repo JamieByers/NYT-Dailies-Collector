@@ -12,6 +12,35 @@ namespace Dailies {
         private static HttpClient httpClient = new();
         public static string date = Fetcher.Date();
 
+        static async Task<string?> Fetch(string url) {
+            try {
+                string response = await httpClient.GetStringAsync(url);
+                Console.WriteLine(response);
+                return response;
+            } catch (HttpRequestException e) {
+                Console.WriteLine($"Could not fetch daily: {url} - {e}");
+                return null;
+            }
+        }
+
+        static string Date() {
+            DateTime now = DateTime.Now;
+            string formatted_date = now.ToString("yyyy/MM/dd");
+            formatted_date = formatted_date.Replace("/", "-");
+            return formatted_date;
+        }
+
+        static Wordle? getWordle(string response) {
+            if (response is not null) {
+                Wordle? wordle = JsonSerializer.Deserialize<Wordle>(response);
+                if (wordle != null) {
+                    return wordle;
+                }
+            }
+
+            return null;
+        }
+
         static public async Task<Wordle?> handleWordle() {
             string wordleUrl = $"https://www.nytimes.com/svc/wordle/v2/{Fetcher.date}.json";
 
@@ -26,35 +55,29 @@ namespace Dailies {
             return null;
         }
 
-        static string Date() {
-            DateTime now = DateTime.Now;
-            string formatted_date = now.ToString("yyyy/MM/dd");
-            formatted_date = formatted_date.Replace("/", "-");
-            return formatted_date;
-        }
-
-        static async Task<string?> Fetch(string url) {
-            try {
-                string response = await httpClient.GetStringAsync(url);
-                Console.WriteLine(response);
-                return response;
-            } catch (HttpRequestException e) {
-                Console.WriteLine($"Could not fetch daily: {url} - {e}");
-                return null;
-            }
-        }
-
-        static Wordle? getWordle(string response) {
-            if (response != null) {
-                Wordle? wordle = JsonSerializer.Deserialize<Wordle>(response);
-                if (wordle != null) {
-                    return wordle;
+        static public Connections? getConnections(string response) {
+            if (response is not null) {
+                Connections? connections = JsonSerializer.Deserialize<Connections>(response);
+                if (connections is not null) {
+                    return connections;
                 }
             }
 
+            return null;
+        }
+
+        static public async Task<Connections?> handleConnections() {
+            string connectionsUrl = $"https://www.nytimes.com/svc/connections/v2/{Fetcher.date}.json";
+
+            string? connectionsResponse = await Fetch(connectionsUrl);
+            if (connectionsResponse is not null) {
+                Connections? connections = getConnections(connectionsResponse);
+                if (connections is not null) {
+                    return connections;
+                }
+            }
 
             return null;
         }
     }
-
 }

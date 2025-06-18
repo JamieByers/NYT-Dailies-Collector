@@ -3,7 +3,6 @@ using Dailies.models;
 namespace Dailies.models {
     public class Wordle : Daily {
         public string solution { get; set; } = "";
-        public string print_date { get; set; } = "";
         public int days_since_launch { get; set; }
 
         public void Display() {
