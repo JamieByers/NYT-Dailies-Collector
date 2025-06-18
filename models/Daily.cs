@@ -1,4 +1,4 @@
-namespace Dialies.models {
+namespace Dailies.models {
 
     public class Daily {
         public int id { get; set; }

@@ -39,3 +39,4 @@
 /Users/jamiebyers/Documents/Code/Projects/dailies_c#/bin/Debug/net9.0/runtimes/win-x86/native/e_sqlite3.dll
 /Users/jamiebyers/Documents/Code/Projects/dailies_c#/obj/Debug/net9.0/dailies_c#.csproj.AssemblyReference.cache
 /Users/jamiebyers/Documents/Code/Projects/dailies_c#/obj/Debug/net9.0/dailies_c#.csproj.Up2Date
+/Users/jamiebyers/Documents/Code/Projects/dailies_c#/obj/Debug/net9.0/dailies_c#.sourcelink.json
