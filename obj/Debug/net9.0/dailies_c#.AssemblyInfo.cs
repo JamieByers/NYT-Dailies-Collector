@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("dailies_c#")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+396d89aaa5bb907ab0e538b63ba891bd7b43d620")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e20982d893b92328a994c608049d6c04986ab0f")]
 [assembly: System.Reflection.AssemblyProductAttribute("dailies_c#")]
 [assembly: System.Reflection.AssemblyTitleAttribute("dailies_c#")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

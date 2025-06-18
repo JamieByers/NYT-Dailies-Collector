@@ -73,65 +73,88 @@ namespace Dailies {
             }
         }
 
-        public void insertIntoConnections(Connections connections) {
+        public bool checkIfConnectionsExists(Connections connections) {
             using (var connection = new SqliteConnection(connectionString)) {
                 connection.Open();
-
-                using var transaction = connection.BeginTransaction();
-
                 var command = connection.CreateCommand();
+
                 command.CommandText = @"
-                    INSERT OR IGNORE INTO ConnectionsTable (id, print_date, editor, status) VALUES ($id, $print_date, $editor, $status);
+                    SELECT 1
+                    FROM ConnectionsTable
+                    WHERE print_date == $print_date
+                    LIMIT 1;
                 ";
 
-                command.Parameters.AddWithValue("$id", connections.id);
                 command.Parameters.AddWithValue("$print_date", connections.print_date);
-                command.Parameters.AddWithValue("$editor", connections.editor);
-                command.Parameters.AddWithValue("$status", connections.editor);
 
-                command.ExecuteNonQuery();
+                var result = command.ExecuteScalar();
+                return result is not null;
+            }
+        }
 
-                /* long connectionId = connection.LastInsertRowId; */
-                var getConnId = connection.CreateCommand();
-                getConnId.CommandText = "SELECT last_insert_rowid();";
-                long connectionId = (long)getConnId.ExecuteScalar();
+        public void insertIntoConnections(Connections connections) {
+            if (checkIfConnectionsExists(connections) != true) {
+                using (var connection = new SqliteConnection(connectionString)) {
+                    connection.Open();
 
+                    using var transaction = connection.BeginTransaction();
 
-                foreach (var category in connections.categories) {
-                    var catCommand = connection.CreateCommand();
-                    catCommand.CommandText = @"
-                        INSERT OR IGNORE INTO Categories (connection_id, title) VALUES ($connection_id, $title);
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"
+                        INSERT OR IGNORE INTO ConnectionsTable (id, print_date, editor, status) VALUES ($id, $print_date, $editor, $status);
                     ";
 
-                    catCommand.Parameters.AddWithValue("$connection_id", connectionId);
-                    catCommand.Parameters.AddWithValue("$title", category.title);
-                    catCommand.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("$id", connections.id);
+                    command.Parameters.AddWithValue("$print_date", connections.print_date);
+                    command.Parameters.AddWithValue("$editor", connections.editor);
+                    command.Parameters.AddWithValue("$status", connections.editor);
 
-                    /* long categoryId = connection.LastInsertRowId; */
-                    var getCatId = connection.CreateCommand();
-                    getCatId.CommandText = "SELECT last_insert_rowid();";
-                    long categoryId = (long)getCatId.ExecuteScalar();
+                    command.ExecuteNonQuery();
+
+                    var getConnId = connection.CreateCommand();
+                    getConnId.CommandText = "SELECT last_insert_rowid();";
+                    var result = getConnId.ExecuteScalar();
+                    if (result is null)
+                        throw new InvalidOperationException("Failed to get last inserted connection ID.");
+                    long connectionId = Convert.ToInt64(result);
 
 
-                    foreach (var card in category.cards) {
-                        var cardCommand = connection.CreateCommand();
-
-                        cardCommand.CommandText = @"
-                            INSERT OR IGNORE INTO Cards (category_id, content, position) VALUES ($category_id, $content, $position);
+                    foreach (var category in connections.categories) {
+                        var catCommand = connection.CreateCommand();
+                        catCommand.CommandText = @"
+                            INSERT OR IGNORE INTO Categories (connection_id, title) VALUES ($connection_id, $title);
                         ";
 
-                        cardCommand.Parameters.AddWithValue("$category_id", categoryId);
-                        cardCommand.Parameters.AddWithValue("$content", card.content);
-                        cardCommand.Parameters.AddWithValue("$position", card.position);
+                        catCommand.Parameters.AddWithValue("$connection_id", connectionId);
+                        catCommand.Parameters.AddWithValue("$title", category.title);
+                        catCommand.ExecuteNonQuery();
 
-                        cardCommand.ExecuteNonQuery();
+                        /* long categoryId = connection.LastInsertRowId; */
+                        var getCatId = connection.CreateCommand();
+                        getCatId.CommandText = "SELECT last_insert_rowid();";
+                        var catResult = getCatId.ExecuteScalar();
+                        if (catResult is null)
+                            throw new InvalidOperationException("Failed to get last inserted category ID.");
+                        long categoryId = Convert.ToInt64(catResult);
 
+
+                        foreach (var card in category.cards) {
+                            var cardCommand = connection.CreateCommand();
+
+                            cardCommand.CommandText = @"
+                                INSERT OR IGNORE INTO Cards (category_id, content, position) VALUES ($category_id, $content, $position);
+                            ";
+
+                            cardCommand.Parameters.AddWithValue("$category_id", categoryId);
+                            cardCommand.Parameters.AddWithValue("$content", card.content);
+                            cardCommand.Parameters.AddWithValue("$position", card.position);
+
+                            cardCommand.ExecuteNonQuery();
+                        }
                     }
+                    transaction.Commit();
                 }
-
-                transaction.Commit();
             }
-
         }
     }
 }

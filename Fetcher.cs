@@ -15,7 +15,6 @@ namespace Dailies {
         static async Task<string?> Fetch(string url) {
             try {
                 string response = await httpClient.GetStringAsync(url);
-                Console.WriteLine(response);
                 return response;
             } catch (HttpRequestException e) {
                 Console.WriteLine($"Could not fetch daily: {url} - {e}");
@@ -48,7 +47,6 @@ namespace Dailies {
             if (wordleResponse is not null) {
                 Wordle? wordle = getWordle(wordleResponse);
                 if (wordle is not null) {
-                    wordle.Display();
                     return wordle;
                 }
             }
