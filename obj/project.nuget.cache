@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "iHQ2/Yts59M=",
+  "success": true,
+  "projectFilePath": "/Users/jamiebyers/Documents/Code/Projects/dailies_c#/dailies_c#.csproj",
+  "expectedPackageFiles": [
+    "/Users/jamiebyers/.nuget/packages/microsoft.data.sqlite/9.0.6/microsoft.data.sqlite.9.0.6.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/microsoft.data.sqlite.core/9.0.6/microsoft.data.sqlite.core.9.0.6.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.10/sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/sqlitepclraw.core/2.1.10/sqlitepclraw.core.2.1.10.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.10/sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.10/sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512",
+    "/Users/jamiebyers/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}
